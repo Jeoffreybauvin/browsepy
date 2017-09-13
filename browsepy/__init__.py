@@ -20,6 +20,8 @@ from .exceptions import OutsideRemovableBase, OutsideDirectoryBase, \
 from . import compat
 from . import __meta__ as meta
 
+from .reverseproxy import ReverseProxied
+
 __app__ = meta.app  # noqa
 __version__ = meta.version  # noqa
 __license__ = meta.license  # noqa
@@ -34,6 +36,7 @@ app = Flask(
     static_folder=os.path.join(__basedir__, "static"),
     template_folder=os.path.join(__basedir__, "templates")
     )
+app.wsgi_app = ReverseProxied(app.wsgi_app)
 app.config.update(
     directory_base=compat.getcwd(),
     directory_start=compat.getcwd(),
